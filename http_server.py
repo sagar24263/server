@@ -1,6 +1,7 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from urllib.parse import parse_qs
 import requests
+import os
 
 form = '''<!DOCTYPE html>
     <h1> URL Shortner </h1>
@@ -26,7 +27,7 @@ def uricheck(url):
     r = requests.get(url)
     return r.status_code == 200
 
-class EchoHandler(BaseHTTPRequestHandler):
+class Shortner(BaseHTTPRequestHandler):
     def do_GET(self):
         name = self.path[1:]
 
@@ -83,8 +84,8 @@ class EchoHandler(BaseHTTPRequestHandler):
 
         
         
+port = int(os.environ.get('PORT', 8000))
 
-
-server_addr = ('',8000)
-httpob = HTTPServer(server_addr,EchoHandler)
+server_addr = ('',port)
+httpob = HTTPServer(server_addr,Shortner)
 httpob.serve_forever()
