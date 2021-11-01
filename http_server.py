@@ -30,7 +30,7 @@ def uricheck(url):
     r = requests.get(url)
     return r.status_code == 200
 
-class ThreadHTTPServer(ThreadingMixIn, http.server.HTTPServer):
+class ThreadHTTPServer(ThreadingMixIn, HTTPServer):
     "This is an HTTPServer that supports thread-based concurrency."
 
 
