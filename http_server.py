@@ -89,5 +89,5 @@ if __name__ == '__main__':
     port = int(os.environ.get('PORT', 8000))
 
     server_addr = ('',port)
-    httpob = Shortner(server_addr,Shortner)
+    httpob = HTTPServer(server_addr,Shortner)
     httpob.serve_forever()
