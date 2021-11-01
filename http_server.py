@@ -2,7 +2,7 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 from urllib.parse import parse_qs
 import requests
 import os
-import threading 
+import threading
 from socketserver import ThreadingMixIn
 
 
@@ -85,8 +85,9 @@ class Shortner(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write("Couldn't find {}".format(longuri).encode())
 
+
 class ThreadHTTPServer(ThreadingMixIn, http.server.HTTPServer):
-    "HTTP Server that supports concurrency"
+    "This is an HTTPServer that supports thread-based concurrency."
 
 
 if __name__ == '__main__':      
