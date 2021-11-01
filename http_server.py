@@ -2,6 +2,8 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 from urllib.parse import parse_qs
 import requests
 import os
+import threading
+from socketserver import ThreadingMixIn
 
 
 form = '''<!DOCTYPE html>
@@ -27,6 +29,9 @@ memory = {}
 def uricheck(url):
     r = requests.get(url)
     return r.status_code == 200
+
+class ThreadHTTPServer(ThreadingMixIn, http.server.HTTPServer):
+    "This is an HTTPServer that supports thread-based concurrency."
 
 
 class Shortner(BaseHTTPRequestHandler):
@@ -89,5 +94,5 @@ if __name__ == '__main__':
     port = int(os.environ.get('PORT', 8000))
 
     server_addr = ('',port)
-    httpob = HTTPServer(server_addr,Shortner)
+    httpob = ThreadHTTPServer(server_addr, Shortner)
     httpob.serve_forever()
