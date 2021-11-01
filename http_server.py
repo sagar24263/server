@@ -2,6 +2,9 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 from urllib.parse import parse_qs
 import requests
 import os
+import threading 
+from socketserver import ThreadingMixIn
+
 
 form = '''<!DOCTYPE html>
     <h1> URL Shortner </h1>
@@ -26,6 +29,7 @@ memory = {}
 def uricheck(url):
     r = requests.get(url)
     return r.status_code == 200
+
 
 class Shortner(BaseHTTPRequestHandler):
     def do_GET(self):
@@ -81,11 +85,13 @@ class Shortner(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write("Couldn't find {}".format(longuri).encode())
 
+class ThreadHTTPServer(ThreadingMixIn, http.server.HTTPServer):
+    "HTTP Server that supports concurrency"
 
 
 if __name__ == '__main__':      
     port = int(os.environ.get('PORT', 8000))
 
     server_addr = ('',port)
-    httpob = HTTPServer(server_addr,Shortner)
+    httpob = ThreadHTTPServer(server_addr,Shortner)
     httpob.serve_forever()
